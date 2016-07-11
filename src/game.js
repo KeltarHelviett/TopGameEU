@@ -1,6 +1,18 @@
 /**/
 "use strict;"
 
+function copyObject(obj) {
+    var copy = Object.create(Object.getPrototypeOf(obj));
+    var propNames = Object.getOwnPropertyNames(obj);
+
+    propNames.forEach(function(name) {
+        var desc = Object.getOwnPropertyDescriptor(obj, name);
+        Object.defineProperty(copy, name, desc);
+    });
+
+    return copy;
+}
+
 function GameObject(parent, cssClass) {
     this.HTML = document.createElement("div");
     this.parent = parent;
@@ -16,22 +28,29 @@ GameObject.prototype.removeObject = function () {
     this.HTML.remove();
 };
 
-GameObject.prototype.rotateRight = function () {
-    /*todo*/
-};
-
 Tube.prototype = new GameObject();
 
-function Tube(parent){
+function Tube(parent) {
     GameObject.call(this, parent, "tube");
-    this.branch =  {
-        r: false,
-        l: false,
+    this.branch = {
         t: false,
+        r: false,
         b: false,
+        l: false
     };
     this.locked = false;
+    this.angle = 0;
 }
+
+Tube.prototype.rotateRight = function () {
+    this.angle += 90;
+    this.HTML.style.transform = "rotate(" + this.angle + "deg)";
+    let tmp = copyObject(this.branch);
+    this.branch.r = tmp.t;
+    this.branch.b = tmp.r;
+    this.branch.l = tmp.b;
+    this.branch.t = tmp.l;
+};
 
 Board.prototype = new GameObject();
 
