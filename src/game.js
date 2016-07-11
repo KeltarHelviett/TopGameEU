@@ -1,5 +1,6 @@
 /**/
 "use strict;"
+
 function GameObject(parent, cssClass) {
     this.HTML = parent.createElement("div");
     this.parent = parent;
@@ -46,5 +47,34 @@ function Board(width, height, level) {
 }
 
 function Game() {
-
+    this.timeLeft;
+    this.board;
 }
+
+Game.prototype.loadLevel = function (width, height, level) {
+    this.board = new Board(width, height, level);
+};
+
+Game.prototype.isOver = function() {
+
+};
+
+Game.prototype.createRandomLevel = function(width, height, complexity) {
+
+};
+
+Game.prototype.solve = function () {
+
+};
+
+Game.prototype.lockUserActions = function () {
+
+};
+
+Game.prototype.unlockUserActions = function () {
+
+};
+
+Game.prototype.restart = function () {
+
+};
