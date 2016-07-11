@@ -2,7 +2,7 @@
 "use strict;"
 
 function GameObject(parent, cssClass) {
-    this.HTML = parent.createElement("div");
+    this.HTML = document.createElement("div");
     this.parent = parent;
     this.HTML.classList.add(cssClass);
 }
