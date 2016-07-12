@@ -4,15 +4,15 @@
     height: 50px;
     top: 10px;
     right: 10px;
-    background-image: url("res/button.png");
+    background-image: url("../res/button.png");
 }
 
 .menuButton:hover {
-    background-image: url("res/button_on_action.png");
+    background-image: url("../res/button_on_action.png");
 }
 
 .menuButton:active {
-    background-image: url("res/button.png");
+    background-image: url("../res/button.png");
 }
 
 .menu {
@@ -67,10 +67,10 @@ figure {
     backface-visibility: hidden;
 }
 .back {
-    background: url(res/gr1.png);
+    background: url(../res/gr1.png);
 }
 .front {
-    background: url(res/gr1.png);
+    background: url(../res/gr1.png);
     -webkit-transform: rotateY( 180deg );
     -moz-transform: rotateY( 180deg );
     -ms-transform: rotateY(180deg);

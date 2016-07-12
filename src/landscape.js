@@ -3,11 +3,43 @@ var clouds = [];
 window.onload = function () {
     tuneLandscape();
     createClouds();
-    timer(1,random(2,8),0);
+    timer(1,random(1,8),0);
 };
 window.onresize = function () {
     tuneLandscape();
 };
+
+/* DOM Utility Functions from PastryKit */
+Element.prototype.hasClassName = function (a) {
+    return new RegExp("(?:^|\\s+)" + a + "(?:\\s+|$)").test(this.className);
+};
+
+Element.prototype.addClassName = function (a) {
+    if (!this.hasClassName(a)) {
+        this.className = [this.className, a].join(" ");
+    }
+};
+
+Element.prototype.removeClassName = function (b) {
+    if (this.hasClassName(b)) {
+        var a = this.className;
+        this.className = a.replace(new RegExp("(?:^|\\s+)" + b + "(?:\\s+|$)", "g"), " ");
+    }
+};
+
+Element.prototype.toggleClassName = function (a) {
+    this[this.hasClassName(a) ? "removeClassName" : "addClassName"](a);
+};
+/* /DOM Utility Functions from PastryKit */
+
+var init = function() {
+
+    document.getElementById('button').addEventListener('click', function(){
+        document.getElementById('card').toggleClassName('flip');
+    }, false);
+};
+
+window.addEventListener( 'DOMContentLoaded', init, false);
 
 function timer(startTime,randomCoefficient,pushed) {
 
@@ -19,7 +51,7 @@ function timer(startTime,randomCoefficient,pushed) {
     else if (startTime % randomCoefficient  == 0) {
             clouds[pushed].style.transition = '80s';
             clouds[pushed].style.transitionTimingFunction = 'linear';
-            pushCloud(clouds[pushed]);
+                    pushCloud(clouds[pushed]);
         
             startTime = 1;
             randomCoefficient = random(2,8);
@@ -53,7 +85,7 @@ function mixCloudsArr(CloudsArr) {
 function createClouds() {
     for (var i = 1; i <= 9; ++i) {
         var cloud = document.createElement('div');
-        cloud.style.background = "url('res/clouds/cloud" + i + ".png')";
+        cloud.style.background = "url(res/clouds/cloud" + i + ".png)";
         cloud.style.backgroundRepeat = 'no-repeat';
         cloud.style.top = random(0,3) * 10 + 'px';
         cloud.className = 'cloud';
@@ -113,6 +145,7 @@ function tuneGroudBlock() {
     with (document.getElementById("skyBlockId")) {
         grounBlock.style.top =  parseInt(style.height) + "px";
     }
+    tuneMenu();
     tuneBoard();
 }
 
@@ -125,3 +158,11 @@ function random(min, max) {
     return rand;
 };
 
+function tuneMenu() {
+    var children = document.getElementById("frontId").childNodes;
+    for (var i = 0; i < children.length;++i) {
+        if (children[i].className == "menuButtons") {
+            children[i].style.top = (i * 22) + 'px';
+        }
+    }
+}
