@@ -1,0 +1,63 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.skyBlock {
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    background-color: #7ed6fc;
+    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%,color-stop(0, rgb(25, 173, 249)),color-stop(1, rgb(29, 174, 249)));
+    background-image: -webkit-linear-gradient(top,rgb(25, 173, 249) 0%,rgb(227, 255, 255) 101.8%);
+    background-image: linear-gradient(to bottom,rgb(25, 173, 249) 0%,rgb(227, 255, 255) 101.8%);
+    background-image: -ms-linear-gradient(top,rgb(25, 173, 249) 0%,rgb(227, 255, 255) 101.8%);
+}
+
+.grountBlock {
+    width: 100%;
+    bottom: 0;
+    position: absolute;
+    background-image: url(res/gr1.png);
+}
+
+
+
+#tree {
+    position: inherit;
+    width: 124px;
+    background-image: url(res/tree1.png);
+    height: 121px;
+    bottom: 0px;
+    right: 10px;
+}
+
+#grass {
+    position: inherit;
+    width: 100%;
+    background-image: url(res/grass.png);
+    background-repeat: repeat-x;
+    height: 30px;
+    bottom: 0px;
+}
+
+#clouds	{
+    width: 100%;
+    height: 100px;
+    position: inherit;
+    background-image: url(res/test3.png);
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+
+
+    animation: animatedClouds 120s linear infinite;
+    -webkit-animation: animatedClouds 120s linear infinite;
+}
+@keyframes animatedClouds {
+    from { background-position: 0 0; }
+    to { background-position: 300% 0; }
+}
+@-webkit-keyframes animatedClouds {
+    from { background-position: 0 0; }
+    to { background-position: 300% 0; }
+}
