@@ -22,6 +22,14 @@
     background-image: url("res/tubeL.png");
 }
 
+.tubeStart {
+    background-image: url("res/tubeStart.png");
+}
+
+.tubeFinish {
+    background-image: url("res/tubeFinish.png");
+}
+
 .board {
     position: inherit;
     border: 4px black outset;
