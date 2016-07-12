@@ -2,6 +2,24 @@
     width: 45px;
     height: 45px;
     position: inherit;
+    background-image: url("res/tTube.png");
+    transition: 0.125s;
+}
+
+.tubeT {
+    background-image: url("res/tubeT.png");
+}
+
+.tubeX {
+    background-image: url("res/tubeX.png");
+}
+
+.tubeI {
+    background-image: url("res/tubeI.png");
+}
+
+.tubeL {
+    background-image: url("res/tubeL.png");
 }
 
 .board {
