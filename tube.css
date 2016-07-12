@@ -1,0 +1,10 @@
+.tube {
+    width: 45px;
+    height: 45px;
+    position: inherit;
+}
+
+.board {
+    position: inherit;
+    border: 4px black outset;
+}
