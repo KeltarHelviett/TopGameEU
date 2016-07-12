@@ -6,8 +6,9 @@
 </head>
 
 <style>
-    @import url("css/landscape.css");
-    @import url("css/tube.css");
+    @import url("landscape.css");
+    @import url("tube.css");
+    @import url("controls.css");
 </style>
 <body>
 
@@ -15,9 +16,29 @@
     <div id="grass"></div>
     <div id="tree"></div>
 </div>
-<div class="groundBlock" id="groundBlockId" >
+<div class="groundBlock" id="groundBlockId">
+
+    <div class="menuButton" id="button">
+    </div>
+
+    <div class="menu" id="menuId">
+        <div id="card">
+            <figure class="back" id="backId">
+            </figure>
+            <figure class="front" id="frontId">
+                <a class="menuButtons">New game</a>
+                <a class="menuButtons">Replay</a>
+                <a class="menuButtons">Solve</a>
+                <a class="menuButtons">Easy</a>
+                <a class="menuButtons">Medium</a>
+                <a class="menuButtons">Hard</a>
+            </figure>
+        </div>
+    </div>
+
 </div>
-<script src="src/landscape.js" type="text/javascript"></script>
+
+<script src="landscape.js" type="text/javascript"></script>
 <script src="src/game.js" type="text/javascript"></script>
 </body>
 </html>
