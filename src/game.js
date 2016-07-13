@@ -261,4 +261,18 @@ Game.prototype.createTestLevel = function () {
 
 
 var game = new Game();
-game.loadLevel(3, 3, randomLevel(3, 3, 1));
+
+var fieldWidth = 5, fieldHeight = 5;
+
+function chooseLevel(w,h){
+    var submenu = document.getElementById("chooseLevelId");
+    submenu.style.display = 'none';
+
+    fieldWidth = w;
+    fieldHeight = h;
+    newGame();
+}
+
+function newGame() {
+    game.loadLevel(fieldWidth, fieldHeight, randomLevel(fieldWidth, fieldHeight, 1));
+}
