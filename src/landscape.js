@@ -41,6 +41,16 @@ var init = function() {
 
 window.addEventListener( 'DOMContentLoaded', init, false);
 
+function showHiddenMenu() {
+    var subMenu = document.getElementById("chooseLevelId");
+    
+    if (subMenu.style.display == 'none'){
+        subMenu.style.display = 'block';
+    } else  {
+        subMenu.style.display = 'none';
+    }
+}
+
 function timer(startTime,randomCoefficient,pushed) {
 
     if (startTime == 9) {
@@ -89,6 +99,7 @@ function createClouds() {
         cloud.style.backgroundRepeat = 'no-repeat';
         cloud.style.top = random(0,3) * 10 + 'px';
         cloud.className = 'cloud';
+        cloud.style.zIndex = 2;
         document.getElementById("skyBlockId").appendChild(cloud);
         clouds.push(cloud);
     }
@@ -158,11 +169,29 @@ function random(min, max) {
     return rand;
 };
 
+function chooseLevel() {
+    var submenu = document.getElementById("chooseLevelId");
+    submenu.style.display = 'none';
+}
+
 function tuneMenu() {
     var children = document.getElementById("frontId").childNodes;
     for (var i = 0; i < children.length;++i) {
         if (children[i].className == "menuButtons") {
-            children[i].style.top = (i * 22) + 'px';
+            var id = children[i].id.split('_');
+            children[i].style.top = (id[0] * 45) + 'px';
+        } else if (children[i].className == "chooseLevel") {
+            var submenu = document.getElementById("chooseLevelId");
+            
+            submenu.style.display = 'none';
+            submenu.style.top = children[i - 4].style.top;
+            
+            for (var j = 0; j < submenu.childNodes.length;++j) {
+                if (submenu.childNodes[j].className == "menuButtons") {
+                    var id = submenu.childNodes[j].id.split('_');
+                    submenu.childNodes[j].style.top = (id[1] * 45) + 'px';
+                }
+            }
         }
     }
 }
