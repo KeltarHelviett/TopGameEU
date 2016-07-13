@@ -20,7 +20,7 @@
     right: -35px;
     top: 50px;
     width: 190px;
-    height: 400px;
+    height: 300px;
     -webkit-perspective: 600px;
     -moz-perspective: 600px;
     -ms-perspective: 600px;
@@ -122,5 +122,11 @@ figure {
 .menuButtons:active {
     position:inherit;
     top:1px;
+}
+
+.chooseLevel {
+    position: inherit;
+    top:0px;
+    left: 70px;
 }
 
