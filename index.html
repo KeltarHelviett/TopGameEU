@@ -26,14 +26,14 @@
             <figure class="back" id="backId">
             </figure>
             <figure class="front" id="frontId">
-                <a class="menuButtons" id = "0">New game</a>
+                <a class="menuButtons" id = "0" onclick = "newGame()">New game</a>
                 <a class="menuButtons" id = "1">Replay</a>
                     <a class="menuButtons" id = "2">Solve</a>
                     <a class="menuButtons" id = "3" onclick="showHiddenMenu()">Level</a>
                     <div class = "chooseLevel" id = "chooseLevelId">
-                        <a class="menuButtons" id = "3_1" onclick="chooseLevel()">Easy</a>
-                        <a class="menuButtons" id = "3_2" onclick="chooseLevel()">Medium</a>
-                        <a class="menuButtons" id = "3_3" onclick="chooseLevel()">Hard</a>
+                        <a class="menuButtons" id = "3_1" onclick="chooseLevel(5,5)">Easy</a>
+                        <a class="menuButtons" id = "3_2" onclick="chooseLevel(10,10)">Medium</a>
+                        <a class="menuButtons" id = "3_3" onclick="chooseLevel(15,15)">Hard</a>
                     </div>
                 <a class="menuButtons" id = "4">Results</a>
             </figure>
