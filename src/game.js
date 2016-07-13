@@ -1,6 +1,11 @@
 /**/
 "use strict;"
 
+var L_TUBE = [true, true, false, false];
+var I_TUBE = [true, false, true, false];
+var T_TUBE = [true, true, true, false];
+var X_TUBE = [true, true, true, true];
+
 function GameObject(parent, cssClass) {
     this.HTML = document.createElement("div");
     this.parent = parent;
@@ -93,8 +98,8 @@ function Board(width, height, startPoints, finishPoints) {
     for (var i = 0; i < startPoints.length; i++) {
         var tmpA = this.begins[i] = {i: startPoints[i], j: 0 };
         var tmpB = this.ends[i] = {i: finishPoints[i], j: width - 1 };
-        this.tubes[tmpA.i][tmpA.j] = new Tube(this.HTML, [true, true, true, true], "tubeStart", tmpA.i, tmpA.j);
-        this.tubes[tmpB.i][tmpB.j] = new Tube(this.HTML, [true, true, true, true], "tubeFinish", tmpB.i, tmpB.j);
+        this.tubes[tmpA.i][tmpA.j] = new Tube(this.HTML, [true, true, true, true], "tubeStart", tmpA.j, tmpA.i);
+        this.tubes[tmpB.i][tmpB.j] = new Tube(this.HTML, [true, true, true, true], "tubeFinish", tmpB.j, tmpB.i);
     }
 
     this.attachObject();
@@ -130,6 +135,21 @@ function tubeDataToCSS(tubeData) {
     }
 }
 
+function cssToTube(cssData) {
+    switch (cssData){
+        case "tubeX":
+            return X_TUBE;
+        case "tubeL":
+            return L_TUBE;
+        case "tubeT":
+            return T_TUBE;
+        case "tubeI":
+            return I_TUBE;
+        default:
+            return [false, false, false, false];
+    }
+}
+
 Game.prototype.loadLevel = function (width, height, level) {
     if (this.board != null) {
         this.board.removeObject();
@@ -144,7 +164,7 @@ Game.prototype.loadLevel = function (width, height, level) {
 
                 continue;
             }
-            this.board.tubes[i][j] = new Tube(this.board, tubeData, cssData, j, i);
+            this.board.tubes[i][j] = new Tube(this.board, cssToTube(cssData), cssData, j, i);
         }
     }
 };
@@ -227,4 +247,4 @@ Game.prototype.createTestLevel = function () {
 
 
 var game = new Game();
-game.loadLevel(12, 12, randomLevel(12, 12, 3));
+game.loadLevel(10, 10, randomLevel(10, 10, 1));
