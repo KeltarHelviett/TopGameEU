@@ -1,4 +1,4 @@
-const wall  = 1;
+﻿const wall  = 1;
 const empty = 0;
 
 function randomInt(max) {
@@ -197,19 +197,21 @@ function findRoute(startPos, endPos, map, freeCell) {
     return backtrace(endPos, routeData(startPos, endPos, map, freeCell));
 }
 
-function routesToTubeData(width, height, routes) {
-    var tubeSize = function (tubeData) {
-        var result = 0;
-        for (var i = 0; i < tubeData.length; i++) {
-            if (tubeData[i]) {
-                result++
-            }
+var sameLine = function (posA, posB) {
+    return posA.x == posB.x || posA.y == posB.y
+};
+
+var tubeSize = function (tubeData) {
+    var result = 0;
+    for (var i = 0; i < tubeData.length; i++) {
+        if (tubeData[i]) {
+            result++
         }
-        return result;
-    };
-    var sameLine = function (posA, posB) {
-        return posA.x == posB.x || posA.y == posB.y
-    };
+    }
+    return result;
+};
+
+function routesToTubeData(width, height, routes) {
     var countMatches = function (dataA, dataB) {
         var result = 0;
         for (var i = 0; i < dataA.length; i++) {
