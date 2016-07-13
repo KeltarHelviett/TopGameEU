@@ -36,7 +36,9 @@ function Tube(parent, branch, tubeType, x, y) {
     }
     this.locked = false;
     this.angle = 0;
-    this.HTML.onclick = this.rotateRight.bind(this);
+    if (tubeType != "tubeStart" && tubeType != "tubeFinish") {
+        this.HTML.onclick = this.rotateRight.bind(this);   
+    }
     this.attachObject();
     this.setPosition(x, y);
     this.i = y;
@@ -69,7 +71,7 @@ Tube.prototype.rotateRight = function () {
 
 Board.prototype = new GameObject();
 
-function Board(width, height, level, startPoints, finishPoints) {
+function Board(width, height, startPoints, finishPoints) {
     GameObject.call(this, document.getElementById("groundBlockId"), "board");
     this.tubes = new Array(height);
     for (let i = 0; i < height; i++){
@@ -77,31 +79,74 @@ function Board(width, height, level, startPoints, finishPoints) {
     }
     this.width = width;
     this.height = height;
-    if (level > 0){
-        console.log("Creating level");
-    }
-    this.HTML.style.width = (width) * 45 + "px";
-    this.HTML.style.top = (height) * 45 + "px";
+    this.HTML.style.width  = width * 45 + "px";
+    this.HTML.style.height = height * 45 + "px";
     this.begins = [];
     this.ends = [];
-    let tmpB, tmpE;
-    for (let i = 0; i < startPoints.length; i++){
-        tmpB = this.begins[i] =  startPoints[i];
-        tmpE = this.ends[i] = finishPoints[i];
-        this.tubes[tmpB.i][tmpB.j] = new Tube(this.HTML, [true, true, true, true], "tubeStart", tmpB.i, tmpB.j);
-        this.tubes[tmpE.i][tmpE.j] = new Tube(this.HTML, [true, true, true, true], "tubeFinish", tmpE.i, tmpE.j);
+    // let tmpB, tmpE;
+    // for (let i = 0; i < startPoints.length; i++){
+    //     tmpB = this.begins[i] =  startPoints[i];
+    //     tmpE = this.ends[i] = finishPoints[i];
+    //     this.tubes[tmpB.i][tmpB.j] = new Tube(this.HTML, [true, true, true, true], "tubeStart", tmpB.i, tmpB.j);
+    //     this.tubes[tmpE.i][tmpE.j] = new Tube(this.HTML, [true, true, true, true], "tubeFinish", tmpE.i, tmpE.j);
+    // }
+    for (var i = 0; i < startPoints.length; i++) {
+        var tmpA = this.begins[i] = {i: startPoints[i], j: 0 };
+        var tmpB = this.ends[i] = {i: finishPoints[i], j: width - 1 };
+        this.tubes[tmpA.i][tmpA.j] = new Tube(this.HTML, [true, true, true, true], "tubeStart", tmpA.i, tmpA.j);
+        this.tubes[tmpB.i][tmpB.j] = new Tube(this.HTML, [true, true, true, true], "tubeFinish", tmpB.i, tmpB.j);
     }
+
     this.attachObject();
 }
+
+Board.prototype.centrify = function () {
+    var newX = Math.floor(window.innerWidth / 2 - this.width / 2 * 45);
+    var newY = Math.floor(window.innerHeight / 2 - this.height / 2 * 45);
+    this.setPosition(newX, newY);
+};
 
 function Game() {
     this.timeLeft;
     this.board;
 }
 
+function tubeDataToCSS(tubeData) {
+    if (tubeSize(tubeData) == 4) {
+        return "tubeX";
+    }
+    if (tubeSize(tubeData) == 3) {
+        return "tubeT";
+    }
+    if (tubeData[0] == true && tubeData[0] == tubeData[2]
+        || tubeData[1] == true && tubeData[1] == tubeData[3]) {
+        return "tubeI";
+    }
+    else if (tubeSize(tubeData) == 0) {
+        return "";
+    }
+    else {
+        return "tubeL";
+    }
+}
+
 Game.prototype.loadLevel = function (width, height, level) {
-    this.board.removeObject();
-    this.board = new Board(width, height, level);
+    if (this.board != null) {
+        this.board.removeObject();
+    }
+    this.board = new Board(width, height, level.startPoints, level.endPoints);
+    //this.board.centrify();
+    for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) {
+            var tubeData = level.tubeData[i][j];
+            var cssData = tubeDataToCSS(tubeData);
+            if (cssData == "") {
+
+                continue;
+            }
+            this.board.tubes[i][j] = new Tube(this.board, tubeData, cssData, j, i);
+        }
+    }
 };
 
 function notAbleToMove(offsetX, offsetY, branch, board) {
@@ -180,5 +225,6 @@ Game.prototype.createTestLevel = function () {
     
 };
 
+
 var game = new Game();
-game.createTestLevel();
+game.loadLevel(12, 12, randomLevel(12, 12, 3));
