@@ -36,6 +36,7 @@ function Tube(parent, branch, tubeType, x, y) {
     GameObject.call(this, parent, "tube");
     this.HTML.classList.add(tubeType);
     this.tubeType = tubeType;
+   
     this.branch = new Array(4);
     for (let i = 0; i < 4; i++){
         this.branch[i] = branch[i];
@@ -43,6 +44,10 @@ function Tube(parent, branch, tubeType, x, y) {
     this.locked = false;
     this.angle = 0;
     if (tubeType != "tubeStart" && tubeType != "tubeFinish") {
+        this.HTML.oncontextmenu = function () {
+            this.rotateLeft();
+            return false;
+        }.bind(this);
         this.HTML.onclick = this.rotateRight.bind(this);
     }
     this.attachObject();
@@ -51,33 +56,128 @@ function Tube(parent, branch, tubeType, x, y) {
     this.j = x;
 }
 
-Tube.prototype.rotateRight = function () {
-    this.angle += 90;
-    this.HTML.style.transform = "rotate(" + this.angle + "deg)";
-    let tmp = this.branch[3];
-    for (let i = 3; i > 0; --i){
-        this.branch[i] = this.branch[i - 1];
+function notAbleToMove(offsetX, offsetY, branch, board) {
+    return offsetX < 0 || offsetX >= board.width || offsetY < 0 || offsetY >= board.height
+        || board.tubes[offsetY][offsetX] == undefined || board.tubes[offsetY][offsetX].branch[branch] == false;
+}
+
+function chechPathExistence(b, si, sj, ei, ej, cameFrom) {
+    if (b.tubes[si][sj] == b.tubes[ei][ej]){
+        return true;
     }
-    this.branch[0] = tmp;
-    var b = this.parent;
-    var win = false;
-    if (b.locked){
-        return;
+    for (let i = 0; i < 4; i++){
+        if (b.tubes[si][sj].branch[i] == true && i != cameFrom){
+            switch (i){
+                case 0:
+                    if (notAbleToMove(sj, si - 1, 2, b)){
+                        break;
+                    }
+                    return chechPathExistence(b, si - 1, sj, ei, ej, 2);
+                case 1:
+                    if (notAbleToMove(sj + 1, si, 3, b)){
+                        break;
+                    }
+                    return chechPathExistence(b, si, sj + 1, ei, ej, 3);
+                case 2:
+                    if (notAbleToMove(sj, si + 1, 0, b)){
+                        break;
+                    }
+                    return chechPathExistence(b, si + 1, sj, ei, ej, 0);
+                case 3:
+                    if (notAbleToMove(sj - 1, si, 1, b)){
+                        break;
+                    }
+                    return chechPathExistence(b, si, sj - 1, ei, ej, 1);
+            }
+        }
+    }
+    return false;
+}
+
+function shiftRight(branch) {
+    let tmp = branch[3];
+    for (let i = 3; i > 0; --i){
+        branch[i] = branch[i - 1];
+    }
+    branch[0] = tmp;
+}
+
+function shiftLeft(bracnh) {
+    let tmp = bracnh[0];
+    for (let i = 0; i < 3; i++){
+        bracnh[i] = bracnh[i + 1];
+    }
+    bracnh[3] = tmp;
+}
+
+function checkWinCondition(board) {
+    let connectedBegins = [];
+    let connectedEnds = [];
+    for (let i = 0; i < board.begins.length; i++){
+        connectedBegins[i] = false;
+        connectedEnds[i] = false;
+    }
+    let b = board;
+    for (let i = 0; i < board.begins.length; i++){
+        for (let j = 0; j < board.ends.length; j++){
+            if (chechPathExistence(b, b.begins[i].i, b.begins[i].j, b.ends[j].i, b.ends[j].j, -1)){
+                connectedBegins[i] = connectedEnds[j] = true;
+            }
+        }
     }
     for (let i = 0; i < b.begins.length; i++){
-        if (!checkWinCondition(b, b.begins[i].i, b.begins[i].j, b.ends[i].i, b.ends[i].j, -1)){
-            win = false;
-            break;
-        }
-        else{
-            win = true;
+        if (!connectedBegins[i] || !connectedEnds[i]){
+            return false;
         }
     }
-    if (win){
-        alert("win");
+    return true;
+}
+
+Tube.prototype.onTubeClick = function (event) {
+    /*var isRMB, isLMB;
+    event = event || window.event;
+
+    if ("which" in event) {
+        isLMB = event.which == 1;
+        isRMB = event.which == 3;
+    }
+    else if ("button" in event) {
+        isRMB = event.button == 2;
+        isLMB = event.button == 1;
+    }
+
+    if (isRMB){
+        alert("didit");
+    }
+    if (isLMB){
+        this.rotateRight();
+    }*/
+    
+};
+
+Tube.prototype.rotate = function (angle) {
+    this.angle += angle;
+    this.HTML.style.transform = "rotate(" + this.angle + "deg)";
+    if (angle < 0){
+        shiftLeft(this.branch);
+    }
+    else {
+        shiftRight(this.branch);
+    }
+    if (!this.branch.locked){
+        if (checkWinCondition(this.parent)){
+            alert("win");
+        }
     }
 };
 
+Tube.prototype.rotateRight = function () {
+    this.rotate(90);
+};
+
+Tube.prototype.rotateLeft = function () {
+    this.rotate(-90);
+};
 Board.prototype = new GameObject();
 
 function Board(width, height, startPoints, finishPoints) {
@@ -168,43 +268,7 @@ Game.prototype.loadLevel = function (width, height, level) {
     this.board.locked = false;
 };
 
-function notAbleToMove(offsetX, offsetY, branch, board) {
-    return offsetX < 0 || offsetX >= board.width || offsetY < 0 || offsetY >= board.height 
-        || board.tubes[offsetY][offsetX] == undefined || board.tubes[offsetY][offsetX].branch[branch] == false;
-}
 
-function checkWinCondition(b, si, sj, ei, ej, cameFrom) {
-    if (b.tubes[si][sj] == b.tubes[ei][ej]){
-        return true;
-    }
-    for (let i = 0; i < 4; i++){
-        if (b.tubes[si][sj].branch[i] == true && i != cameFrom){
-            switch (i){
-                case 0:
-                    if (notAbleToMove(sj, si - 1, 2, b)){
-                        break;
-                    }
-                    return checkWinCondition(b, si - 1, sj, ei, ej, 2);
-                case 1:
-                    if (notAbleToMove(sj + 1, si, 3, b)){
-                        break;
-                    }
-                    return checkWinCondition(b, si, sj + 1, ei, ej, 3);
-                case 2:
-                    if (notAbleToMove(sj, si + 1, 0, b)){
-                        break;
-                    }
-                    return checkWinCondition(b, si + 1, sj, ei, ej, 0);
-                case 3:
-                    if (notAbleToMove(sj - 1, si, 1, b)){
-                        break;
-                    }
-                    return checkWinCondition(b, si, sj - 1, ei, ej, 1);
-            }
-        }
-    }
-    return false;
-}
 
 Game.prototype.isOver = function() {
     var b = this.board;
