@@ -26,12 +26,16 @@
             <figure class="back" id="backId">
             </figure>
             <figure class="front" id="frontId">
-                <a class="menuButtons">New game</a>
-                <a class="menuButtons">Replay</a>
-                <a class="menuButtons">Solve</a>
-                <a class="menuButtons">Easy</a>
-                <a class="menuButtons">Medium</a>
-                <a class="menuButtons">Hard</a>
+                <a class="menuButtons" id = "0">New game</a>
+                <a class="menuButtons" id = "1">Replay</a>
+                    <a class="menuButtons" id = "2">Solve</a>
+                    <a class="menuButtons" id = "3" onclick="showHiddenMenu()">Level</a>
+                    <div class = "chooseLevel" id = "chooseLevelId">
+                        <a class="menuButtons" id = "3_1" onclick="chooseLevel()">Easy</a>
+                        <a class="menuButtons" id = "3_2" onclick="chooseLevel()">Medium</a>
+                        <a class="menuButtons" id = "3_3" onclick="chooseLevel()">Hard</a>
+                    </div>
+                <a class="menuButtons" id = "4">Results</a>
             </figure>
         </div>
     </div>
@@ -39,8 +43,8 @@
 </div>
 
 <script src="src/landscape.js" type="text/javascript"></script>
-<script src="src/generator.js" type="text/javascript"></script>
 <script src="src/game.js" type="text/javascript"></script>
+<script src="src/generator.js" type="text/javascript"></script>
 
 </body>
 </html>
